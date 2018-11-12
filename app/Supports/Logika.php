@@ -52,7 +52,7 @@ class Logika {
     $ciMaksMin      = [];
     $ciNormalisasi  = [];
 
-    foreach ($this->kreteria as $index => $item) {
+    foreach ($this->kreteria as $index => $item){
       $hasilNilai     = Hasil::where('kreteria_id',$item->id)->get();
       $hasilNilaiKode = Hasil::kreteriaAlternatif($item->id)->get();
 

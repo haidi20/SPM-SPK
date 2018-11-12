@@ -22,7 +22,7 @@ class DataController extends Controller
   }
 
   public function index(){
-     $this->inputNormalisasi();
+    return $this->inputNormalisasi();
     $this->inputKinerja();
 
     if($this->jenis('nama') == 'topsis') {
@@ -60,7 +60,7 @@ class DataController extends Controller
   public function jenis($jenis){
     // nama metode yang di pakai
     $nama = Auth::user()->nama;
-    if ($jenis == 'nama') {
+    if ($jenis == 'nama'){
       return $nama ;
     }elseif($jenis == 'status'){
       // function inutKinerja
@@ -76,13 +76,13 @@ class DataController extends Controller
 
 // NORMALISASI UNTUK SAW DAN TOPSIS
   public function inputNormalisasi(){
-    if ($this->jenis('nama') == 'saw') {
+    if ($this->jenis('nama') == 'saw'){
       $normalisasiProses = $this->logika->normalisasiProses();
     }elseif($this->jenis('nama') == 'topsis'){
       $normalisasiProses  = $this->topsis->normalisasiProses();
     }
 
-    // return $normalisasiProses;
+    return $normalisasiProses;
 
     foreach ($normalisasiProses as $index => $item) {
       foreach ($item as $key => $value) {
