@@ -19,9 +19,11 @@
             <tr>
               <td>{{$index + 1}}</td>
               <td>{{$item->alternatif->nama}}</td>
-              @foreach ($kreteria as $key => $value)
+              {{-- @foreach ($kreteria as $key => $value)
                 <td>{{array_get($nilai[$item->alternatif_id],$value->id)}}</td>
-              @endforeach
+              @endforeach --}}
+              <td></td>
+              <td></td>
               <td>
                 <a href="{{route('sekolah.edit',$item->alternatif_id)}}" class="btn btn-info btn-sm ">Edit</a>
                 <a href="{{route('sekolah.destroy',$item->alternatif_id)}}"

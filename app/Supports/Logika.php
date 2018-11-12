@@ -10,10 +10,87 @@ use App\Models\Normalisasi;
 
 class Logika {
 
-  public function __construct(Kreteria $kreteria,Alternatif $alternatif){
-    $this->kreteria   = Kreteria::orderBy('kode')->get();
-    $this->alternatif = Alternatif::all();
+  public function __construct(
+                              Kreteria $kreteria,
+                              Alternatif $alternatif,
+                              Hasil $hasil
+                            ){
+    $this->kreteria   = $kreteria;
+    $this->alternatif = $alternatif;
+    $this->hasil      = $hasil;
   }
+
+  public function normalisasiProses()
+  {
+    $kreteria = $this->kreteria->get();
+    $hasil    = $this->hasil;
+    $nilai = [];
+
+    foreach ($kreteria as $index => $item) {
+      $dataHasil      = $hasil->kreteriaAlternatif($item->id)->get();
+
+      $perhitunganNormalisasi[] = $this->perhitunganNormalisasi($dataHasil, $item);
+    }
+
+    return $ciMaksMin;
+  }
+
+  public function perhitunganNormalisasi($nilai, $kreteria)
+  {
+      $maksMin          = '';
+      $hasil            = [];
+      $attribute        = $kreteria->attribute;
+      $nilaiKeseluruhan = [];
+
+      foreach ($nilai as $index => $item) {
+        $nilaiKeseluruhan[] = $item->nilai;
+      }
+
+      if($attribute == 'Benefit'){
+        $maksMin = max($nilaiKeseluruhan);
+      }else{
+        $maksMin = min($nilaiKeseluruhan);
+      }
+
+      foreach ($nilai as $index => $item) {
+        if($item->nilai != 0){
+          if($attribute == 'Benefit'){
+            $hasil[] = $item->nilai / $maksMin;
+          }else{
+            $hasil[] = $maksMin / $item->nilai;
+          }
+        }else{
+          $hasil[] = 0;
+        }
+      }
+
+      return (object) compact('hasil', 'attribute');
+  }
+
+  // public function normalisasiProses(){
+  //   $ciMaksMin      = [];
+  //   $ciNormalisasi  = [];
+
+  //   foreach ($this->kreteria as $index => $item) {
+  //     $hasilNilai     = Hasil::where('kreteria_id',$item->id)->get();
+  //     $hasilNilaiKode = Hasil::kreteriaAlternatif($item->id)->get();
+
+  //     $attribute = kondisi_attribute($hasilNilaiKode);
+
+  //     $ciMaksMin[] = [
+  //       'kreteria'  => $item->id,
+  //       // variable attribute untuk menentukan kondisi nilai maks atau min
+  //       'nilai'     => nilai_maksmin($hasilNilai,$attribute),
+  //       'attribute' => $attribute
+  //     ];
+
+  //     $ciNormalisasi[] = proses_normalisasi($ciMaksMin,$hasilNilaiKode) ;
+  //   }
+
+  //   return $ciNormalisasi;
+
+  //   return 'proses normalisasi';
+  // }
 
   public function peringkatProses(){
     $alternatif = Hasil::groupBy('alternatif_id')->get();
@@ -46,29 +123,6 @@ class Logika {
     }
 
     return $ciNilai ;
-  }
-
-  public function normalisasiProses(){
-    $ciMaksMin      = [];
-    $ciNormalisasi  = [];
-
-    foreach ($this->kreteria as $index => $item) {
-      $hasilNilai     = Hasil::where('kreteria_id',$item->id)->get();
-      $hasilNilaiKode = Hasil::kreteriaAlternatif($item->id)->get();
-
-      $attribute = kondisi_attribute($hasilNilaiKode);
-
-      $ciMaksMin[] = [
-        'kreteria'  => $item->id,
-        // variable attribute untuk menentukan kondisi nilai maks atau min
-        'nilai'     => nilai_maksmin($hasilNilai,$attribute),
-        'attribute' => $attribute
-      ];
-
-      $ciNormalisasi[] = proses_normalisasi($ciMaksMin,$hasilNilaiKode) ;
-    }
-
-    return $ciNormalisasi;
   }
 
 // memunculkan data normalisasi untuk jenis SAW dan TOPSIS

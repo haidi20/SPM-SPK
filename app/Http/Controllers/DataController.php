@@ -22,18 +22,41 @@ class DataController extends Controller
   }
 
   public function index(){
-     $this->inputNormalisasi();
-    $this->inputKinerja();
+    return $this->inputNormalisasi();
+    // $this->inputKinerja();
 
-    if($this->jenis('nama') == 'topsis') {
-      $this->inputAlphaPositif();
-      $this->inputAlphaNegatif();
-      $this->inputDeltaPositif();
-      $this->inputDeltaNegatif();
-    }
+    // if($this->jenis('nama') == 'topsis') {
+    //   $this->inputAlphaPositif();
+    //   $this->inputAlphaNegatif();
+    //   $this->inputDeltaPositif();
+    //   $this->inputDeltaNegatif();
+    // }
 
-    $this->inputPeringkat();
-    return $this->jalur();
+    // $this->inputPeringkat();
+    // return $this->jalur();
+  }
+
+  // NORMALISASI UNTUK SAW DAN TOPSIS
+  public function inputNormalisasi(){
+    $normalisasiProses = $this->logika->normalisasiProses();
+
+    return $normalisasiProses;
+
+    // foreach ($normalisasiProses as $index => $item) {
+    //   foreach ($item as $key => $value) {
+    //     $nilai      = $value['nilai'];
+    //     $kreteria   = $value['kreteria'];
+    //     $alternatif = $value['alternatif'];
+
+    //     $normalisasi = Normalisasi::FirstOrCreate([
+    //       'jenis'         => $this->jenis('nama'),
+    //       'kreteria_id'   =>$kreteria,
+    //       'alternatif_id' =>$alternatif
+    //     ]);
+    //     $normalisasi->nilai = $nilai;
+    //     $normalisasi->save();
+    //   }
+    // }
   }
 
 // menampilkan data sekolah secara realtime..
@@ -73,33 +96,6 @@ class DataController extends Controller
   }
 
 // end function supports
-
-// NORMALISASI UNTUK SAW DAN TOPSIS
-  public function inputNormalisasi(){
-    if ($this->jenis('nama') == 'saw') {
-      $normalisasiProses = $this->logika->normalisasiProses();
-    }elseif($this->jenis('nama') == 'topsis'){
-      $normalisasiProses  = $this->topsis->normalisasiProses();
-    }
-
-    // return $normalisasiProses;
-
-    foreach ($normalisasiProses as $index => $item) {
-      foreach ($item as $key => $value) {
-        $nilai      = $value['nilai'];
-        $kreteria   = $value['kreteria'];
-        $alternatif = $value['alternatif'];
-
-        $normalisasi = Normalisasi::FirstOrCreate([
-          'jenis'         => $this->jenis('nama'),
-          'kreteria_id'   =>$kreteria,
-          'alternatif_id' =>$alternatif
-        ]);
-        $normalisasi->nilai = $nilai;
-        $normalisasi->save();
-      }
-    }
-  }
 
 // input data KINERJA untuk SAW dan TERBOBOT untuk TOPSIS
   public function inputKinerja(){
