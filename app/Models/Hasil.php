@@ -33,7 +33,7 @@ class Hasil extends Model
     }
 
     public function scopeKondisiAlternatif($query,$id){
-      $query->where('alternatif_id',$id)
+      $query->where('alternatif_id', $id)
             ->orderBy('kreteria_id');
     }
 

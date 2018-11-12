@@ -23,14 +23,7 @@ class DataController extends Controller
 
   public function index(){
     return $this->inputNormalisasi();
-    // $this->inputKinerja();
-
-    // if($this->jenis('nama') == 'topsis') {
-    //   $this->inputAlphaPositif();
-    //   $this->inputAlphaNegatif();
-    //   $this->inputDeltaPositif();
-    //   $this->inputDeltaNegatif();
-    // }
+    $this->inputKinerja();
 
     // $this->inputPeringkat();
     // return $this->jalur();
@@ -40,23 +33,23 @@ class DataController extends Controller
   public function inputNormalisasi(){
     $normalisasiProses = $this->logika->normalisasiProses();
 
-    return $normalisasiProses;
+    // return $normalisasiProses;
 
-    // foreach ($normalisasiProses as $index => $item) {
-    //   foreach ($item as $key => $value) {
-    //     $nilai      = $value['nilai'];
-    //     $kreteria   = $value['kreteria'];
-    //     $alternatif = $value['alternatif'];
+    foreach ($normalisasiProses as $index => $item) {
+      $attribute  = $item->attribute;
+      $kreteria_id= $item->kreteria;
 
-    //     $normalisasi = Normalisasi::FirstOrCreate([
-    //       'jenis'         => $this->jenis('nama'),
-    //       'kreteria_id'   =>$kreteria,
-    //       'alternatif_id' =>$alternatif
-    //     ]);
-    //     $normalisasi->nilai = $nilai;
-    //     $normalisasi->save();
-    //   }
-    // }
+      foreach ($item->hasilAkhir as $key => $value) {
+        $nilai      = $value->nilai;
+        $alternatif_id = $value->alternatif;
+
+        $normalisasi = Normalisasi::FirstOrCreate(compact('kreteria_id', 'alternatif_id'));
+        $normalisasi->nilai = $nilai;
+        $normalisasi->save();
+      }
+    }
+
+    return $normalisasi;
   }
 
 // menampilkan data sekolah secara realtime..

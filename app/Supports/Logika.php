@@ -23,74 +23,53 @@ class Logika {
   public function normalisasiProses()
   {
     $kreteria = $this->kreteria->get();
-    $hasil    = $this->hasil;
-    $nilai = [];
 
     foreach ($kreteria as $index => $item) {
-      $dataHasil      = $hasil->kreteriaAlternatif($item->id)->get();
-
-      $perhitunganNormalisasi[] = $this->perhitunganNormalisasi($dataHasil, $item);
+      $dataHasil            = $hasil->kreteriaAlternatif($item->id)->get();
+      $hitungNormalisasi[]  = $this->hitungNormalisasi($dataHasil, $item);
     }
 
-    return $ciMaksMin;
+    return $hitungNormalisasi;
   }
 
-  public function perhitunganNormalisasi($nilai, $kreteria)
+  public function hitungNormalisasi($nilai, $kreteria)
   {
       $maksMin          = '';
-      $hasil            = [];
+      $hasilAkhir       = [];
       $attribute        = $kreteria->attribute;
+      $kreteria         = $kreteria->id;
       $nilaiKeseluruhan = [];
 
+      // memasukkan nilai ke dalam array
       foreach ($nilai as $index => $item) {
         $nilaiKeseluruhan[] = $item->nilai;
       }
 
+      // kondisi attribute nilai max atau min
       if($attribute == 'Benefit'){
         $maksMin = max($nilaiKeseluruhan);
       }else{
         $maksMin = min($nilaiKeseluruhan);
       }
 
+      // perhitungan normaliasi berdasarkan kondisi attribute
       foreach ($nilai as $index => $item) {
         if($item->nilai != 0){
           if($attribute == 'Benefit'){
-            $hasil[] = $item->nilai / $maksMin;
+            $nilai = $item->nilai / $maksMin;
           }else{
-            $hasil[] = $maksMin / $item->nilai;
+            $nilai = $maksMin / $item->nilai;
           }
         }else{
-          $hasil[] = 0;
+          $nilai = 0;
         }
+
+        $alternatif   = $item->alternatif_id;
+        $hasilAkhir[] = (object) compact('nilai', 'alternatif');
       }
 
-      return (object) compact('hasil', 'attribute');
+      return (object) compact('hasilAkhir', 'attribute', 'kreteria');
   }
-
-  // public function normalisasiProses(){
-  //   $ciMaksMin      = [];
-  //   $ciNormalisasi  = [];
-
-  //   foreach ($this->kreteria as $index => $item) {
-  //     $hasilNilai     = Hasil::where('kreteria_id',$item->id)->get();
-  //     $hasilNilaiKode = Hasil::kreteriaAlternatif($item->id)->get();
-
-  //     $attribute = kondisi_attribute($hasilNilaiKode);
-
-  //     $ciMaksMin[] = [
-  //       'kreteria'  => $item->id,
-  //       // variable attribute untuk menentukan kondisi nilai maks atau min
-  //       'nilai'     => nilai_maksmin($hasilNilai,$attribute),
-  //       'attribute' => $attribute
-  //     ];
-
-  //     $ciNormalisasi[] = proses_normalisasi($ciMaksMin,$hasilNilaiKode) ;
-  //   }
-
-  //   return $ciNormalisasi;
-
-  //   return 'proses normalisasi';
-  // }
 
   public function peringkatProses(){
     $alternatif = Hasil::groupBy('alternatif_id')->get();
@@ -125,40 +104,37 @@ class Logika {
     return $ciNilai ;
   }
 
-// memunculkan data normalisasi untuk jenis SAW dan TOPSIS
   public function normalisasi($jenis){
-    $alternatif = $this->alternatif;
+    $alternatif = $this->alternatif->get();
     $nilai      = [];
 
     foreach ($alternatif as $index => $item) {
-      $nilai[$item->id] = Normalisasi::alternatifKreteria($item->id)
-                                    ->kondisiJenis($jenis)
-                                    ->pluck('nilai','kreteria_id');
+      $nilai[$item->id] = Normalisasi::alternatifKreteria($item->id)->pluck('nilai','kreteria_id');
     }
 
     return $nilai ;
   }
 
   public function sekolah(){
-    $alternatif = $this->alternatif;
-    $nilai      = [];
+    $alternatif = $this->alternatif->get();
+    $hasilAkhir = [];
 
     foreach ($alternatif as $index => $item) {
-      $nilai[$item->id] = Hasil::kondisiAlternatif($item->id)->pluck('nilai','kreteria_id');
+      $hasilAkhir[$item->id] = $this->hasil->kondisiAlternatif($item->id)->pluck('nilai','kreteria_id');
     }
 
-    return $nilai ;
+    return $hasilAkhir;
   }
 
   public function inputan($id,$keyword){
-    $kreteria     = $this->kreteria ;
-    $nilai        = [];
+    $kreteria     = $this->kreteria->get() ;
+    $hasilAkhir        = [];
 
     foreach ($kreteria as $index => $item) {
-      $nilai[$item->id] = Hasil::kondisiKreteria($item->id,$id,$keyword)
+      $hasilAkhir[$item->id] = Hasil::kondisiKreteria($item->id,$id,$keyword)
                                 ->value('nilai');
     }
 
-    return $nilai;
+    return $hasilAkhir;
   }
 }

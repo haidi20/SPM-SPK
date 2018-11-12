@@ -127,40 +127,6 @@ if ( ! function_exists('proses_pengalian_bobot') )
     }
 }
 
-if ( ! function_exists('proses_normalisasi') )
-{
-  function proses_normalisasi($ciMaksMin,$hasil){
-    $hasill = [];
-
-    foreach ($hasil as $index => $item) {
-      $nilai = number_format($hasil[$index]['nilai'],4) ;
-      $alternatif = $hasil[$index]['alternatif_id'];
-      $kreteriaHasil = $hasil[$index]['kreteria_id'] ;
-
-      foreach ($ciMaksMin as $key => $value) {
-        $nilaiMaksMin = $value['nilai'] ;
-        $attribute = $value['attribute'];
-        $kreteriaMaks = $value['kreteria'];
-
-        if ($kreteriaHasil == $kreteriaMaks) {
-          if ($attribute == 'maksimal') {
-            $jawaban = $nilai / $nilaiMaksMin;
-          }else{
-            $jawaban = $nilaiMaksMin / $nilai;
-          }
-          $hasill[$alternatif] = [
-            'kreteria' => $kreteriaHasil,
-            'alternatif' => $alternatif,
-            'nilai' => number_format($jawaban,4)
-          ] ;
-        }
-      }
-    }
-
-    return $hasill ;
-  }
-}
-
 if ( ! function_exists('nilai_maksmin') )
 {
     function nilai_maksmin($nilai,$kondisi){

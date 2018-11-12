@@ -21,10 +21,8 @@ class NormalisasiController extends Controller
 
       $kreteria     = Kreteria::berdasarkan()->get();
       $normalisasi  = Normalisasi::berdasarkanAlternatif()->get();
-      $nilai        = $this->logika->normalisasi('saw') ;
+      $nilai        = $this->logika->normalisasi('saw');
 
-      return view('normalisasi.index',compact(
-        'kreteria','normalisasi','nilai'
-      ));
+      return view('normalisasi.index',compact('kreteria','normalisasi','nilai'));
     }
 }
