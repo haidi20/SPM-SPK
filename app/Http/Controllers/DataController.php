@@ -21,16 +21,17 @@ class DataController extends Controller
     $this->topsis = $topsis;
   }
 
-  public function index(){
-    return $this->inputNormalisasi();
+  public function index()
+  {
+    $this->inputNormalisasi();
     $this->inputKinerja();
-
-    // $this->inputPeringkat();
-    // return $this->jalur();
+    $this->inputPeringkat();
+    return $this->jalur();
   }
 
   // NORMALISASI UNTUK SAW DAN TOPSIS
-  public function inputNormalisasi(){
+  public function inputNormalisasi()
+  {
     $normalisasiProses = $this->logika->normalisasiProses();
 
     // return $normalisasiProses;
@@ -52,8 +53,46 @@ class DataController extends Controller
     return $normalisasi;
   }
 
+  public function inputKinerja()
+  {
+    $kinerjaProses  = $this->logika->kinerjaProses();
+
+    foreach ($kinerjaProses as $key => $value) {
+      foreach ($value as $index => $item) {
+        $nilai          = $item->nilai;
+        $kreteria_id    = $item->kreteria_id;
+        $alterantif_id  = $item->alternatif_id;
+
+        $kinerja        = Kinerja::firstOrCreate(compact('alternatif_id','kreteria_id'));
+        $kinerja->nilai = $nilai;
+        $kinerja->save();
+      }
+    }
+
+    return $kinerja;
+  }
+
+  public function inputPeringkat()
+  {
+    $peringkatProses = $this->logika->peringkatProses();
+
+    foreach ($peringkatProses as $index => $item) {
+      $nilai        = $item->nilai;
+      $rangking     = $item->peringkat;
+      $alternatif_id= $item->alternatif;
+
+      $peringkat            = Peringkat::firstOrCreate(compact('alternatif_id'));
+      $peringkat->nilai     = $nilai;
+      $peringkat->peringkat = $rangking;
+      $peringkat->save();
+    }
+
+    return $peringkat;
+  }
+
 // menampilkan data sekolah secara realtime..
-  public function dataSekolah(){
+  public function dataSekolah()
+  {
     $id = request('alter');
     $nilai  = $this->logika->inputan($id,'ajax');
 
@@ -72,65 +111,7 @@ class DataController extends Controller
     }
   }
 
-// function JENIS
-  public function jenis($jenis){
-    // nama metode yang di pakai
-    $nama = Auth::user()->nama;
-    if ($jenis == 'nama') {
-      return $nama ;
-    }elseif($jenis == 'status'){
-      // function inutKinerja
-      if ($nama == 'saw') {
-        return 'kinerja';
-      }else{
-        return 'terbobot';
-      }
-    }
-  }
-
 // end function supports
-
-// input data KINERJA untuk SAW dan TERBOBOT untuk TOPSIS
-  public function inputKinerja(){
-    $kinerjaProses  = $this->logika->kinerjaProses($this->jenis('nama'));
-    $kinerja        = [];
-
-    foreach ($kinerjaProses as $key => $value) {
-      foreach ($value as $index => $item) {
-        $nilai          = $item['nilai'];
-        $kreteria_id    = $item['kreteria'];
-        $alternatif_id  = $item['alternatif'];
-        $jenis          = $this->jenis('status');
-
-        $kinerja        = Kinerja::firstOrCreate(compact('alternatif_id','kreteria_id','jenis'));
-        $kinerja->nilai = $nilai;
-        $kinerja->save();
-      }
-    }
-  }
-
-  public function inputPeringkat(){
-    $jenis = $this->jenis('nama') ;
-    if ($jenis == 'saw') {
-      $peringkatProses = $this->logika->peringkatProses();
-    }elseif($jenis == 'topsis'){
-      $peringkatProses = $this->topsis->peringkatProses();
-    }
-
-    foreach ($peringkatProses as $key => $value) {
-      $nilai      = $value['nilai'];
-      $rengking   = $value['rengking'];
-      $alternatif_id = $value['alternatif'];
-
-      $peringkat = Peringkat::firstOrCreate([
-        'jenis' => $jenis,
-        'alternatif_id' => $alternatif_id
-      ]);
-      $peringkat->nilai = $nilai;
-      $peringkat->peringkat = $rengking;
-      $peringkat->save();
-    }
-  }
 
 // start SUPPORTS pembantu
   public function inputPembantu($data,$format,$jenis){

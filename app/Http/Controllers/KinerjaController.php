@@ -15,7 +15,7 @@ class KinerjaController extends Controller
       session()->put('aktif','kinerja');
       session()->put('aktiff','');
 
-      $kinerja = Peringkat::orderBy('alternatif_id')->where('jenis','saw')->get();
+      $kinerja = Peringkat::orderBy('alternatif_id')->get();
 
       return view('kinerja.index',compact('kinerja'));
     }

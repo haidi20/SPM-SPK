@@ -13,19 +13,21 @@ class Logika {
   public function __construct(
                               Kreteria $kreteria,
                               Alternatif $alternatif,
-                              Hasil $hasil
+                              Hasil $hasil,
+                              Kinerja $kinerja
                             ){
     $this->kreteria   = $kreteria;
     $this->alternatif = $alternatif;
     $this->hasil      = $hasil;
+    $this->kinerja    = $kinerja;
   }
 
   public function normalisasiProses()
   {
     $kreteria = $this->kreteria->get();
 
-    foreach ($kreteria as $index => $item) {
-      $dataHasil            = $hasil->kreteriaAlternatif($item->id)->get();
+    foreach ($kreteria as $index => $item){
+      $dataHasil            = $this->hasil->kreteriaAlternatif($item->id)->get();
       $hitungNormalisasi[]  = $this->hitungNormalisasi($dataHasil, $item);
     }
 
@@ -41,7 +43,7 @@ class Logika {
       $nilaiKeseluruhan = [];
 
       // memasukkan nilai ke dalam array
-      foreach ($nilai as $index => $item) {
+      foreach ($nilai as $index => $item){
         $nilaiKeseluruhan[] = $item->nilai;
       }
 
@@ -53,7 +55,7 @@ class Logika {
       }
 
       // perhitungan normaliasi berdasarkan kondisi attribute
-      foreach ($nilai as $index => $item) {
+      foreach ($nilai as $index => $item){
         if($item->nilai != 0){
           if($attribute == 'Benefit'){
             $nilai = $item->nilai / $maksMin;
@@ -71,38 +73,69 @@ class Logika {
       return (object) compact('hasilAkhir', 'attribute', 'kreteria');
   }
 
+  public function kinerjaProses(){
+    $kreteria   = $this->kreteria->get();
+    $hasilAkhir = [];
+
+    foreach ($kreteria as $index => $item){
+      $nilai = Normalisasi::where('kreteria_id', $item->id)->get();
+      $hasilAkhir[] = $this->pengalianBobot($item->bobot, $nilai);
+    }
+
+    return $hasilAkhir;
+  }
+
+  public function pengalianBobot($bobot, $nilai)
+  {
+    $hasilAkhir = [];
+
+    foreach ($nilai as $index => $item){
+      $nilai          = $item->nilai * $bobot;
+      $alternatif_id  = $item->alternatif_id;
+      $kreteria_id    = $item->kreteria_id;
+
+      $hasilAkhir[]   = (object) compact('nilai', 'alternatif_id', 'kreteria_id');
+    }
+
+    return $hasilAkhir;
+  }
+
   public function peringkatProses(){
-    $alternatif = Hasil::groupBy('alternatif_id')->get();
-    $x      = [];
+    $alternatif = $this->alternatif->get();
 
-    foreach ($alternatif as $index => $item) {
-      $jumlah = Kinerja::where('alternatif_id',$item->alternatif_id)
-                       ->where('jenis','kinerja')
-                       ->sum('nilai');
-      $x[] = [
-        'nilai'=>number_format($jumlah,4),
-        'alternatif' => $item->alternatif_id,
-      ];
+    foreach($alternatif as $index => $item){
+      $nilai          = $this->kinerja->where('alternatif_id', $item->id)->sum('nilai');
+      $alternatif_id  = $item->id;
+
+      $pengurutan[]   = (object) compact('nilai', 'alternatif_id'); 
     }
 
-    $hasil = proses_pengurutan($x);
+    $hasilAkhir = $this->prosesPengurutan($pengurutan);
 
-    return $hasil ;
-  }
+    return $hasilAkhir;
+  } 
 
-// memunculkan data kinerja untuk SAW dan data terbobot untuk TOPSIS //
-  public function kinerjaProses($jenis){
-    $ciNilai = [];
+  public function prosesPengurutan($pengurutan)
+  {
+    $hasilAkhir = [];
 
-    foreach ($this->kreteria as $index => $item) {
-      $normalNilai = Normalisasi::where('kreteria_id',$item->id)
-                                ->kondisiJenis($jenis)
-                                ->get();
-      $ciNilai[] = proses_pengalian_bobot($item->bobot,$normalNilai);
+    foreach ($pengurutan as $index => $item) {
+      $nilai      = strval($item->nilai);
+      $alternatif = $item->alternatif_id;
+      $hasil[]    = (object) compact('nilai', 'alternatif');
     }
 
-    return $ciNilai ;
-  }
+    rsort($hasil);
+
+    for ($i=0; $i < count($hasil); $i++) { 
+      $peringkat = $i + 1;
+      $hasil[$i]->peringkat = $peringkat;
+      $hasil[$i]->nilai = (double) $hasil[$i]->nilai;
+      $hasilAkhir[] = $hasil[$i];
+    }
+
+    return $hasilAkhir;
+  } 
 
   public function normalisasi($jenis){
     $alternatif = $this->alternatif->get();
@@ -127,12 +160,11 @@ class Logika {
   }
 
   public function inputan($id,$keyword){
-    $kreteria     = $this->kreteria->get() ;
-    $hasilAkhir        = [];
+    $kreteria   = $this->kreteria->get();
+    $hasilAkhir = [];
 
     foreach ($kreteria as $index => $item) {
-      $hasilAkhir[$item->id] = Hasil::kondisiKreteria($item->id,$id,$keyword)
-                                ->value('nilai');
+      $hasilAkhir[$item->id] = Hasil::kondisiKreteria($item->id,$id,$keyword)->value('nilai');
     }
 
     return $hasilAkhir;
