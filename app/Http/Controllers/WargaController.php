@@ -13,7 +13,7 @@ use App\Models\Normalisasi;
 
 use App\Supports\Logika;
 
-class SekolahController extends Controller
+class WargaController extends Controller
 {
 
     public function __construct(Logika $logika){
@@ -44,21 +44,22 @@ class SekolahController extends Controller
 
       if (count($hasilFind)) {
         session()->flashInput($hasilFind->toArray());
-        $action = Route('sekolah.update',$id);
+        $action = Route('warga.update',$id);
         $method = "PUT";
       }else{
-        $action = Route('sekolah.store');
+        $action = Route('warga.store');
         $method = "POST";
       }
 
       $alternatif     = Alternatif::all();
       $alternatif_id  = $id;
+      $alternatif_name= Alternatif::find($id);
       $kreteria       = Kreteria::orderBy('kode')->get();
       $hasil          = Hasil::kreteriaAlternatif($id)->get();
       $nilai          = $this->logika->inputan($id,'no-ajax');
 
-      return view('sekolah.form',compact(
-        'action','method','alternatif','hasil','kreteria','nilai','alternatif_id'
+      return view('warga.form',compact(
+        'action','method','alternatif','hasil','kreteria','nilai','alternatif_id', 'alternatif_name'
       ));
     }
 
@@ -72,7 +73,6 @@ class SekolahController extends Controller
 
     public function save($id = null){
       $hasil = [];
-
       $array = request('nilai');
 
       // input data ke table hasil
@@ -86,7 +86,7 @@ class SekolahController extends Controller
         $hasil->save();
       }
 
-      session()->put('controller','sekolah');
+      session()->put('controller','warga');
 
       // return redirect()->route('input.normalisasi');
       return redirect()->route('input.index');

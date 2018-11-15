@@ -7,7 +7,7 @@
         <h1>Form Warga</h1>
       </div>
       <div class="col-md-6 text-right">
-        <a href="{{route('sekolah.index')}}" class="btn btn-success btn-md buat">Kembali</a>
+        <a href="{{route('warga.index')}}" class="btn btn-success btn-md buat">Kembali</a>
       </div>
     </div>
     <hr class="dashed mb20 mt20">
@@ -21,12 +21,17 @@
             <div class="col-md">
               <div class="form-group">
                 <label for="alternatif">Alternatif</label>
-                <select name="alternatif" id="alternatif" class="form-control">
-                  <option value="">Pilih Alternatif</option>
-                  @foreach ($alternatif as $index => $item)
-                    <option value="{{$item->id}}" {{$alternatif_id == $item->id?'selected':''}}>{{$item->nama}}</option>
-                  @endforeach
-                </select>
+                @if($method == 'POST')
+                  <select name="alternatif" id="alternatif" class="form-control">
+                    <option value="">Pilih Alternatif</option>
+                    @foreach ($alternatif as $index => $item)
+                      <option value="{{$item->id}}" {{$alternatif_id == $item->id?'selected':''}}>{{$item->nama}}</option>
+                    @endforeach
+                  </select>
+                @else
+                  <input type="text" value="{{$alternatif_name->nama}}" class="form-control" disabled>
+                  <input type="hidden" name="alternatif" value="{{$alternatif_name->id}}">
+                @endif
               </div>
             </div>
           </div>

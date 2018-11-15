@@ -49,4 +49,14 @@ class Logika {
 
     return $hasilAkhir;
   }
+
+  public function inputan($id,$keyword)
+  {
+    $kreteria   = $this->kreteria->get();
+    $hasilAkhir = [];
+    foreach ($kreteria as $index => $item) {
+      $hasilAkhir[$item->id] = Hasil::kondisiKreteria($item->id,$id,$keyword)->value('nilai');
+    }
+    return $hasilAkhir;
+  }
 }

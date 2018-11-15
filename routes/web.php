@@ -23,7 +23,7 @@ Route::group(['middleware' => 'auth'],function(){
     Route::get('normalisasi','NormalisasiController@index')->name('topsis.normalisasi.index');
   });
   // route untuk keperluan fitur" di saw //
-  Route::resource('warga','SekolahController');
+  Route::resource('warga','WargaController');
   Route::resource('kreteria','KreteriaController');
   Route::resource('alternatif','AlternatifController');
   Route::get('analisa','AnalisaController@index')->name('analisa.index');

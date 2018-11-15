@@ -11,7 +11,7 @@ $(function(){
       const value = $('#alternatif').val()
       // console.log(value)
 
-      const url = '/data/sekolah?alter='+value;
+      const url = '/data/warga?alter='+value;
       // console.log(url);
 
       $.ajax({
