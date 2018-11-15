@@ -4,7 +4,7 @@
   <div class="container">
     <div class="row">
       <div class="col-md-12">
-        <h1>Penilaian Kinerja</h1>
+        <h1>Data Vector S</h1>
       </div>
     </div>
     <hr class="dashed mb20 mt20">
@@ -12,23 +12,19 @@
     <div class="row">
       <div class="col-md-offset-2 col-md-8">
         <table class="table table-bordered text-center">
-          <thead>
+          <thead >
             <tr>
               <th class="no">No</th>
-              <th>Kode Sekolah</th>
-              <th>Nama Sekolah</th>
+              <th>Nama Warga</th>
               <th>Nilai</th>
-              <th>Ranking</th>
             </tr>
           </thead>
           <tbody>
-            @foreach ($kinerja as $index => $item)
+            @foreach($alternatif as $index => $item)
               <tr>
-                <td>{{$index + 1}}</td>
-                <td>{{$item->alternatif->kode}}</td>
-                <td>{{$item->alternatif->nama}}</td>
-                <td>{{$item->nilai}}</td>
-                <td>{{$item->peringkat}}</td>
+                <td>{{($index + 1)}}</td>
+                <td>{{$item->nama}}</td>
+                <td>{{array_get($hasil, $item->id)}}</td>
               </tr>
             @endforeach
           </tbody>

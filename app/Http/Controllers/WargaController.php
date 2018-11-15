@@ -5,11 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Models\Hasil;
-use App\Models\Kinerja;
 use App\Models\Kreteria;
-use App\Models\Peringkat;
 use App\Models\Alternatif;
-use App\Models\Normalisasi;
 
 use App\Supports\Logika;
 
@@ -52,14 +49,13 @@ class WargaController extends Controller
       }
 
       $alternatif     = Alternatif::all();
-      $alternatif_id  = $id;
-      $alternatif_name= Alternatif::find($id);
+      $alternatif_id  = Alternatif::find($id);
       $kreteria       = Kreteria::orderBy('kode')->get();
       $hasil          = Hasil::kreteriaAlternatif($id)->get();
       $nilai          = $this->logika->inputan($id,'no-ajax');
 
       return view('warga.form',compact(
-        'action','method','alternatif','hasil','kreteria','nilai','alternatif_id', 'alternatif_name'
+        'action','method','alternatif','hasil','kreteria','nilai','alternatif_id'
       ));
     }
 
@@ -88,8 +84,7 @@ class WargaController extends Controller
 
       session()->put('controller','warga');
 
-      // return redirect()->route('input.normalisasi');
-      return redirect()->route('input.index');
+      return redirect()->route('warga.index');
     }
 
     public function destroy($id){

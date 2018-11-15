@@ -63,8 +63,7 @@ class KreteriaController extends Controller
 
       session()->put('controller','kreteria');
 
-      // return redirect()->route('input.normalisasi');
-      return redirect()->route('input.index');
+      return redirect()->route('kreteria.index');
     }
 
     public function destroy($id){

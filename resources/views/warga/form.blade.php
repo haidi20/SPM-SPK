@@ -25,12 +25,12 @@
                   <select name="alternatif" id="alternatif" class="form-control">
                     <option value="">Pilih Alternatif</option>
                     @foreach ($alternatif as $index => $item)
-                      <option value="{{$item->id}}" {{$alternatif_id == $item->id?'selected':''}}>{{$item->nama}}</option>
+                      <option value="{{$item->id}}">{{$item->nama}}</option>
                     @endforeach
                   </select>
                 @else
-                  <input type="text" value="{{$alternatif_name->nama}}" class="form-control" disabled>
-                  <input type="hidden" name="alternatif" value="{{$alternatif_name->id}}">
+                  <input type="text" value="{{$alternatif_id->nama}}" class="form-control" disabled>
+                  <input type="hidden" name="alternatif" value="{{$alternatif_id->id}}">
                 @endif
               </div>
             </div>
