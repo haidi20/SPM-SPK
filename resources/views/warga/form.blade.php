@@ -4,7 +4,7 @@
   <div class="container">
     <div class="row">
       <div class="col-md-6">
-        <h1>Form Sekolah</h1>
+        <h1>Form Warga</h1>
       </div>
       <div class="col-md-6 text-right">
         <a href="{{route('sekolah.index')}}" class="btn btn-success btn-md buat">Kembali</a>

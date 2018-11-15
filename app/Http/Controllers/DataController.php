@@ -4,158 +4,47 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use App\Models\Kinerja;
-use App\Models\Pembantu;
-use App\Models\Peringkat;
-use App\Models\Normalisasi;
+use App\Models\Perbaikan_bobot;
 
 use App\Supports\Logika;
-use App\Supports\Topsis;
 
 use Auth;
 
 class DataController extends Controller
 {
-  public function __construct(Logika $logika,Topsis $topsis){
-    $this->logika = $logika;
-    $this->topsis = $topsis;
+  public function __construct(Logika $logika, Perbaikan_bobot $perbaikanBobot){
+    $this->logika         = $logika;
+    $this->perbaikanBobot = $perbaikanBobot;
   }
 
   public function index()
   {
-    $this->inputNormalisasi();
-    $this->inputKinerja();
-    $this->inputPeringkat();
+    $this->inputPerbaikanBobot();
+
     return $this->jalur();
   }
 
-  // NORMALISASI UNTUK SAW DAN TOPSIS
-  public function inputNormalisasi()
+  public function inputPerbaikanBobot()
   {
-    $normalisasiProses = $this->logika->normalisasiProses();
+    $inputPerbaikanBobot = $this->logika->perbaikanBobotProses();
 
-    // return $normalisasiProses;
+    foreach ($inputPerbaikanBobot as $index => $item) {
+      $nilai  = (double) $item->nilai;
+      $kode   = $item->kode;
 
-    foreach ($normalisasiProses as $index => $item) {
-      $attribute  = $item->attribute;
-      $kreteria_id= $item->kreteria;
-
-      foreach ($item->hasilAkhir as $key => $value) {
-        $nilai      = $value->nilai;
-        $alternatif_id = $value->alternatif;
-
-        $normalisasi = Normalisasi::FirstOrCreate(compact('kreteria_id', 'alternatif_id'));
-        $normalisasi->nilai = $nilai;
-        $normalisasi->save();
-      }
+      $perbaikanBobot = $this->perbaikanBobot::updateOrCreate(compact('kode'));
+      $perbaikanBobot->nilai = $nilai;
+      $perbaikanBobot->save();
     }
-
-    return $normalisasi;
   }
 
-  public function inputKinerja()
+  public function jalur()
   {
-    $kinerjaProses  = $this->logika->kinerjaProses();
-
-    foreach ($kinerjaProses as $key => $value) {
-      foreach ($value as $index => $item) {
-        $nilai          = $item->nilai;
-        $kreteria_id    = $item->kreteria_id;
-        $alterantif_id  = $item->alternatif_id;
-
-        $kinerja        = Kinerja::firstOrCreate(compact('alternatif_id','kreteria_id'));
-        $kinerja->nilai = $nilai;
-        $kinerja->save();
-      }
+    if (session()->get('controller') == 'warga'){
+      return redirect()->route('warga.index');
     }
-
-    return $kinerja;
-  }
-
-  public function inputPeringkat()
-  {
-    $peringkatProses = $this->logika->peringkatProses();
-
-    foreach ($peringkatProses as $index => $item) {
-      $nilai        = $item->nilai;
-      $rangking     = $item->peringkat;
-      $alternatif_id= $item->alternatif;
-
-      $peringkat            = Peringkat::firstOrCreate(compact('alternatif_id'));
-      $peringkat->nilai     = $nilai;
-      $peringkat->peringkat = $rangking;
-      $peringkat->save();
-    }
-
-    return $peringkat;
-  }
-
-// menampilkan data sekolah secara realtime..
-  public function dataSekolah()
-  {
-    $id = request('alter');
-    $nilai  = $this->logika->inputan($id,'ajax');
-
-    return $nilai ;
-  }
-
-// start function supports
-
-// function jalur
-  public function jalur(){
-    if (session()->get('controller') == 'sekolah') {
-      return redirect()->route('sekolah.index');
-    }
-    else if (session()->get('controller') == 'kreteria') {
+    else if (session()->get('controller') == 'kreteria'){
       return redirect()->route('kreteria.index');
     }
-  }
-
-// end function supports
-
-// start SUPPORTS pembantu
-  public function inputPembantu($data,$format,$jenis){
-    // alpha = kreteria_id dan delta = alternatif_id
-    if ($format == 'alpha') {
-      $atribut = 'kreteria_id';
-    }else{
-      $atribut = 'alternatif_id';
-    }
-    foreach ($data as $index => $item) {
-      $pembantu = Pembantu::firstOrCreate([
-        $atribut      => $index,
-        'jenis'       => $jenis,
-        'format'      => $format
-      ]);
-      $pembantu->nilai = $item;
-      $pembantu->save();
-    }
-  }
-//end SUPPORTS pembantu alpha dan delta
-
-  public function inputAlphaPositif(){
-    $data = $this->topsis->alphaProses('maksimal');
-
-    $this->inputPembantu($data,'alpha','positif');
-  }
-
-  public function inputAlphaNegatif(){
-    $data   = $this->topsis->alphaProses('minimal');
-
-    $this->inputPembantu($data,'alpha','negatif');
-  }
-
-  public function inputDeltaPositif(){
-    $jenis  = 'positif';
-
-    $data   = $this->topsis->deltaProses($jenis);
-    $this->inputPembantu($data,'delta',$jenis);
-  }
-
-  public function inputDeltaNegatif(){
-    $jenis  = 'negatif';
-
-    $data   = $this->topsis->deltaProses($jenis);
-    $this->inputPembantu($data,'delta',$jenis);
   }
 }

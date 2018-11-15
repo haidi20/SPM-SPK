@@ -10,7 +10,7 @@ Route::group(['middleware' => 'auth'],function(){
     return view('dashboard.index');
   })->name('dashboard');
   // route untuk keperluan input data dan ajax //
-  Route::get('data/sekolah','DataController@dataSekolah')->name('data.sekolah');
+  Route::get('data/warga','DataController@dataWarga')->name('data.warga');
   Route::get('data/input','DataController@index')->name('input.index');
 
   // route untuk keperluan fitur" topsis //
@@ -23,7 +23,7 @@ Route::group(['middleware' => 'auth'],function(){
     Route::get('normalisasi','NormalisasiController@index')->name('topsis.normalisasi.index');
   });
   // route untuk keperluan fitur" di saw //
-  Route::resource('sekolah','SekolahController');
+  Route::resource('warga','SekolahController');
   Route::resource('kreteria','KreteriaController');
   Route::resource('alternatif','AlternatifController');
   Route::get('analisa','AnalisaController@index')->name('analisa.index');

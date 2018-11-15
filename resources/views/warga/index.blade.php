@@ -4,14 +4,14 @@
   <div class="container">
     <div class="row">
       <div class="col-md-6">
-        <h1>Data Sekolah</h1>
+        <h1>Data Warga</h1>
       </div>
       <div class="col-md-6 text-right">
-        <a href="{{route('sekolah.create')}}" class="btn btn-md btn-success buat">Buat</a>
+        <a href="{{route('warga.create')}}" class="btn btn-md btn-success buat">Buat</a>
       </div>
     </div>
     <hr class="dashed mb20 mt20">
     <br>
-    @include('sekolah.table')
+    @include('warga.table')
   </div>
 @endsection

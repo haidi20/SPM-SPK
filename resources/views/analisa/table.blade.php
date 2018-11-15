@@ -4,8 +4,8 @@
       <thead >
         <tr>
           <th class="no">No</th>
-          <th>Kode Sekolah</th>
-          <th>Nama Sekolah</th>
+          <th>Kode warga</th>
+          <th>Nama warga</th>
           @forelse ($kreteria as $index => $item)
             <th>{{$item->kode}}</th>
           @empty
@@ -14,7 +14,7 @@
         </tr>
       </thead>
       <tbody>
-        @forelse ($sekolah as $index => $item)
+        @forelse ($warga as $index => $item)
           @if ($item->alternatif)
             <tr>
               <td>{{$index + 1}}</td>

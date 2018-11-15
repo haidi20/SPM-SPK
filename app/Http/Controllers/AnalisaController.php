@@ -18,12 +18,12 @@ class AnalisaController extends Controller
 
     public function index(){
       $kreteria   = Kreteria::berdasarkan()->get();
-      $sekolah    = Hasil::berdasarkanAlternatif()->get();
-      $nilai      = $this->logika->sekolah();
+      $warga      = Hasil::berdasarkanAlternatif()->get();
+      $nilai      = $this->logika->warga();
 
       session()->put('aktif','analisa');
       session()->put('aktiff','');
 
-      return view('analisa.index',compact('nilai','kreteria','sekolah'));
+      return view('analisa.index',compact('nilai','kreteria','warga'));
     }
 }

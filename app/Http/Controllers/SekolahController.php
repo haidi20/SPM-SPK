@@ -22,13 +22,13 @@ class SekolahController extends Controller
 
     public function index(){
       $kreteria   = Kreteria::berdasarkan()->get();
-      $sekolah    = Hasil::berdasarkanAlternatif()->get();
-      $nilai      = $this->logika->sekolah();
+      $warga      = Hasil::berdasarkanAlternatif()->get();
+      $nilai      = $this->logika->warga();
 
-      session()->put('aktif','sekolah');
+      session()->put('aktif','warga');
       session()->put('aktiff','dasar');
 
-      return view('sekolah.index',compact('nilai','kreteria','sekolah'));
+      return view('warga.index',compact('nilai','kreteria','warga'));
     }
 
     public function create(){

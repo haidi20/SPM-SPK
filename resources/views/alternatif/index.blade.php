@@ -18,8 +18,8 @@
           <thead >
             <tr>
               <th class="no">No</th>
-              <th>Kode Sekolah</th>
-              <th>Nama Sekolah</th>
+              <th>Kode warga</th>
+              <th>Nama warga</th>
               <th class="action">Action</th>
             </tr>
           </thead>
