@@ -4,10 +4,11 @@
   <div class="container">
     <div class="row">
       <div class="col-md-6">
-        <h1>Data Kriteria</h1>
+        <h1>Data Detail Kriteria</h1>
       </div>
       <div class="col-md-6 text-right">
-        <a href="{{route('kreteria.create')}}" class="btn btn-md btn-success buat">Buat</a>
+        <a href="{{route('kreteria.index')}}" class="btn btn-info btn-md buat">Kembali</a>
+        <a href="{{route('detail-kreteria.create', ['kreteria' => $kreteria])}}" class="btn btn-md btn-success buat">Buat</a>
       </div>
     </div>
     <hr class="dashed mb20 mt20">
@@ -18,25 +19,20 @@
           <thead>
             <tr>
               <th class="no">No</th>
-              <th>ID</th>
-              <th>Kreteria</th>
-              <th>Attribut</th>
+              <th>Nama Detail Kriteria</th>
               <th>Bobot</th>
               <th class="action">Action</th>
             </tr>
           </thead>
           <tbody>
-            @forelse ($kreteria as $index => $item)
+            @forelse ($detailKreteria as $index => $item)
               <tr>
                 <td>{{$index + 1}}</td>
-                <td>{{$item->kode}}</td>
                 <td>{{$item->nama}}</td>
-                <td>{{$item->attribute}}</td>
-                <td>{{$item->bobot}}</td>
+                <td>{{$item->nilai}}</td>
                 <td>
-                  <a href="{{route('detail-kreteria.index',['kreteria' => $item->id])}}" class="btn btn-warning btn-sm">Detail</a>
-                  <a href="{{route('kreteria.edit',$item->id)}}" class="btn btn-info btn-sm ">Edit</a>
-                  <a href="{{route('kreteria.destroy',$item->id)}}"
+                  <a href="{{route('detail-kreteria.edit', $item->id)}}" class="btn btn-info btn-sm ">Edit</a>
+                  <a href="{{route('detail-kreteria.destroy', $item->id)}}"
                     data-method="DELETE" data-confirm="Anda yakin akan menghapus data ini?"
                     class="btn btn-sm btn-danger" title="Hapus Data">
                     Delete

@@ -40,7 +40,12 @@
               <div class="form-group">
                 @forelse ($kreteria as $index => $item)
                   <label for="nilai_{{$item->id}}">{{$item->nama}}</label>
-                  <input type="text" name="nilai[{{$item->id}}]" id="nilai_{{$item->id}}" class="form-control" value="{{array_get($nilai,$item->id)}}">
+                  <select name="alternatif" id="alternatif" class="form-control">
+                    @foreach ($item->detail as $key => $value)
+                      <option value="{{$value->id}}" {{$item->bobot == $value->nilai}}>{{$value->nama}}</option>
+                    @endforeach
+                  </select>
+                  {{-- <input type="text" name="nilai[{{$item->id}}]" id="nilai_{{$item->id}}" class="form-control" value="{{array_get($nilai,$item->id)}}"> --}}
                   <input type="hidden" name="kreteria[]" value="{{$item->kreteria_id}}">
                   <input type="hidden" name="konfirm" value="true">
                 @empty

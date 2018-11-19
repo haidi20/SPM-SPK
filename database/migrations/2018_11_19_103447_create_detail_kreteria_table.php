@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateBobotTable extends Migration
+class CreateDetailKreteriaTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,11 @@ class CreateBobotTable extends Migration
      */
     public function up()
     {
-        Schema::create('perbaikan_bobot', function (Blueprint $table) {
+        Schema::create('detail_kreteria', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('kode');
-            $table->double('nilai');
+            $table->integer('kreteria_id')->unsigned();
+            $table->string('nama')->nullable();
+            $table->double('nilai')->default(0);
             $table->timestamps();
         });
     }
@@ -28,6 +29,6 @@ class CreateBobotTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('bobot');
+        Schema::dropIfExists('detail_kreteria');
     }
 }

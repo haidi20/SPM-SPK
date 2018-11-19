@@ -26,7 +26,19 @@ class Logika {
     $hasilAkhir   = [];
 
     foreach ($alternatif as $index => $item) {
-      $hasilAkhir[$item->id] = number_format($nilai[$item->id] / $sumNilai, 3);
+      $hasilPembagian = number_format($nilai[$item->id] / $sumNilai, 3);
+      $alternatif     = $item->nama;
+
+      $hasil[]        = (object) compact('hasilPembagian', 'alternatif');
+    }
+
+    rsort($hasil);
+
+    for ($i=0; $i < count($hasil); $i++) { 
+      $peringkat                  = $i + 1;
+      $hasil[$i]->peringkat       = $peringkat;
+      $hasil[$i]->hasilPembagian  = (double) $hasil[$i]->hasilPembagian;
+      $hasilAkhir[] = $hasil[$i];
     }
 
     return $hasilAkhir;
@@ -34,29 +46,26 @@ class Logika {
 
   public function prosesVectorS()
   {
-    $bobot        = $this->perbaikanBobotProses();
+    $bobot        = $this->prosesPerbaikanBobot();
     $alternatif   = $this->alternatif->get();
-    $hasilAKhir   = [];
+    $hasilAkhir   = [];
 
     foreach ($alternatif as $index => $item){
       $hasil[] = $this->hasil->kondisiAlternatif($item->id)->get();
       foreach ($bobot as $key => $value){
-        if($value->attribute == 'Benefit'){
-          $nilaiBobot = (double) $value->nilai;
-        }else{
-          $nilaiBobot = (double) -1 * $value->nilai;
-        }
+        $nilaiBobot = $value->attribute == 'Benefit' ? (double) $value->nilai : (double) -1 * $value->nilai;
         $pangkat[$item->id][$key] = pow($hasil[$index][$key]->nilai, $nilaiBobot);
       }
-      $hasilAKhir[$item->id]  = $this->perkalian($pangkat[$item->id]);
+      $hasilAkhir[$item->id]  = $this->perkalian($pangkat[$item->id]);
     }
 
-    return $hasilAKhir;
+    return $hasilAkhir;
   }
 
   public function perkalian($nilai)
   {
     $jumlah = 1;
+    
     foreach ($nilai as $index => $item) {
       $jumlah = $jumlah * $item;
     }
@@ -64,7 +73,7 @@ class Logika {
     return number_format($jumlah, 3);
   }
 
-  public function perbaikanBobotProses()
+  public function prosesPerbaikanBobot()
   {
     $kreteria   = $this->kreteria->get();
     $sumBobot   = $this->kreteria->sum('bobot');
@@ -93,13 +102,15 @@ class Logika {
     return $hasilAkhir;
   }
 
-  public function inputan($id,$keyword)
+  public function inputan($id)
   {
     $kreteria   = $this->kreteria->get();
     $hasilAkhir = [];
+
     foreach ($kreteria as $index => $item) {
-      $hasilAkhir[$item->id] = Hasil::kondisiKreteria($item->id,$id,$keyword)->value('nilai');
+      $hasilAkhir[$item->id] = Hasil::kondisiKreteria($item->id,$id)->value('nilai');
     }
+
     return $hasilAkhir;
   }
 }

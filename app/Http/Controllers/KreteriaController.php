@@ -8,7 +8,8 @@ use App\Models\Kreteria;
 
 class KreteriaController extends Controller
 {
-    public function index(){
+    public function index()
+    {
       $kreteria = Kreteria::berdasarkan()->get();
 
       session()->put('aktif','kreteria');
@@ -17,15 +18,18 @@ class KreteriaController extends Controller
       return view('kreteria.index',compact('kreteria'));
     }
 
-    public function create(){
+    public function create()
+    {
       return $this->form();
     }
 
-    public function edit($id){
+    public function edit($id)
+    {
       return $this->form($id);
     }
 
-    public function form($id = null){
+    public function form($id = null)
+    {
       $kreteriaFind = Kreteria::find($id);
 
       if ($kreteriaFind) {
@@ -40,15 +44,18 @@ class KreteriaController extends Controller
       return view('kreteria.form',compact('action','method'));
     }
 
-    public function store(){
+    public function store()
+    {
       return $this->save();
     }
 
-    public function update($id){
+    public function update($id)
+    {
       return $this->save($id);
     }
 
-    public function save($id = null){
+    public function save($id = null)
+    {
       if ($id) {
         $kreteria = Kreteria::find($id);
       }else{
@@ -66,10 +73,11 @@ class KreteriaController extends Controller
       return redirect()->route('kreteria.index');
     }
 
-    public function destroy($id){
-      $kreteria = Kreteria::find($id);
-      $kreteria->delete();
+    public function destroy($id)
+    {
+      // $kreteria = Kreteria::find($id);
+      // $kreteria->delete();
 
-      return redirect()->back();
+      // return redirect()->back();
     }
 }

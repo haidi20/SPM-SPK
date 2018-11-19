@@ -24,8 +24,9 @@
             <li class="{{session()->get('aktif') == 'kreteria'?'active':''}}"><a href="{{route('kreteria.index')}}">Kriteria</a></li>
           </ul>
         </li>
-        <li><a href="{{route('vector.s')}}">Vector S</a></li>
-        <li><a href="{{route('vector.v')}}">Vector V</a></li>
+        <li class="{{session()->get('aktif') == 'vectorS'?'active':''}}"><a href="{{route('vector.s')}}">Vector S</a></li>
+        <li class="{{session()->get('aktif') == 'vectorV'?'active':''}}"><a href="{{route('vector.v')}}">Vector V</a></li>
+        <li ><a href="{{route('laporan')}}">Laporan</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right ukuran-huruf">
         <li>

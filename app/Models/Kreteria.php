@@ -8,11 +8,18 @@ class Kreteria extends Model
 {
     protected $table = "kreteria";
 
-    public function hasil(){
+    public function hasil()
+    {
       return $this->hasMany('App\Models\Hasil');
     }
 
-    public function scopeBerdasarkan($query){
+    public function detail()
+    {
+    	return $this->hasMany('App\Models\Detail_kreteria', 'kreteria_id');
+    }
+
+    public function scopeBerdasarkan($query)
+    {
       $query->orderBy('kode');
     }
 }

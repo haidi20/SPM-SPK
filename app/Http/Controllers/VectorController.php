@@ -16,14 +16,22 @@ class VectorController extends Controller
 
     public function vectorS()
     {
-    	$alternatif = $this->alternatif->all();
-    	$hasil 		= $this->logika->prosesVectorS();
+		$alternatif = $this->alternatif->all();
+		$hasil 		= $this->logika->prosesVectorS();
 
-    	return view('vector.vectorS', compact('alternatif', 'hasil'));
+		session()->put('aktif','vectorS');
+	  	session()->put('aktiff','');
+
+		return view('vector.vectorS', compact('alternatif', 'hasil'));
     }
 
     public function vectorV()
     {
-    	return $this->logika->prosesVectorV();
+    	$hasil	= $this->logika->prosesVectorV();
+
+    	session()->put('aktif','vectorV');
+      	session()->put('aktiff','');
+
+    	return view('vector.vectorV', compact('hasil'));
     }
 }
