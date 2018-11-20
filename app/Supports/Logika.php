@@ -25,20 +25,22 @@ class Logika {
     $sumNilai     = array_sum($nilai);
     $hasilAkhir   = [];
 
-    foreach ($alternatif as $index => $item) {
-      $hasilPembagian = number_format($nilai[$item->id] / $sumNilai, 3);
-      $alternatif     = $item->nama;
+    if($nilai != null){
+      foreach ($alternatif as $index => $item) {
+        $hasilPembagian = number_format($nilai[$item->id] / $sumNilai, 3);
+        $alternatif     = $item->nama;
 
-      $hasil[]        = (object) compact('hasilPembagian', 'alternatif');
-    }
+        $hasil[]        = (object) compact('hasilPembagian', 'alternatif');
+      }
 
-    rsort($hasil);
+      rsort($hasil);
 
-    for ($i=0; $i < count($hasil); $i++) { 
-      $peringkat                  = $i + 1;
-      $hasil[$i]->peringkat       = $peringkat;
-      $hasil[$i]->hasilPembagian  = (double) $hasil[$i]->hasilPembagian;
-      $hasilAkhir[] = $hasil[$i];
+      for ($i=0; $i < count($hasil); $i++) { 
+        $peringkat                  = $i + 1;
+        $hasil[$i]->peringkat       = $peringkat;
+        $hasil[$i]->hasilPembagian  = (double) $hasil[$i]->hasilPembagian;
+        $hasilAkhir[] = $hasil[$i];
+      }
     }
 
     return $hasilAkhir;
@@ -49,14 +51,18 @@ class Logika {
     $bobot        = $this->prosesPerbaikanBobot();
     $alternatif   = $this->alternatif->get();
     $hasilAkhir   = [];
+    $pangkat      = [];
+    $hasil        = [];
 
-    foreach ($alternatif as $index => $item){
-      $hasil[] = $this->hasil->kondisiAlternatif($item->id)->get();
-      foreach ($bobot as $key => $value){
-        $nilaiBobot = $value->attribute == 'Benefit' ? (double) $value->nilai : (double) -1 * $value->nilai;
-        $pangkat[$item->id][$key] = pow($hasil[$index][$key]->nilai, $nilaiBobot);
+    if($bobot){
+      foreach ($alternatif as $index => $item){
+        $hasil[] = $this->hasil->kondisiAlternatif($item->id)->get();
+        foreach ($bobot as $key => $value){
+          $nilaiBobot = $value->attribute == 'Benefit' ? (double) $value->nilai : (double) -1 * $value->nilai;
+          $pangkat[$item->id][$key] = pow($hasil[$index][$key]->nilai, $nilaiBobot);
+        }
+        $hasilAkhir[$item->id]  = $this->perkalian($pangkat[$item->id]);
       }
-      $hasilAkhir[$item->id]  = $this->perkalian($pangkat[$item->id]);
     }
 
     return $hasilAkhir;
@@ -66,8 +72,10 @@ class Logika {
   {
     $jumlah = 1;
     
-    foreach ($nilai as $index => $item) {
-      $jumlah = $jumlah * $item;
+    if($this->nilai != null){
+      foreach ($nilai as $index => $item) {
+        $jumlah = $jumlah * $item;
+      }
     }
 
     return number_format($jumlah, 3);
