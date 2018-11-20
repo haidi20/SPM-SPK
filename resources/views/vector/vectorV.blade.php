@@ -21,14 +21,18 @@
             </tr>
           </thead>
           <tbody>
-            @foreach($hasil as $index => $item)
+            @forelse($hasil as $index => $item)
               <tr>
                 <td>{{($index + 1)}}</td>
                 <td>{{$item->alternatif}}</td>
                 <td>{{$item->hasilPembagian}}</td>
                 <td>{{$item->peringkat}}</td>
               </tr>
-            @endforeach
+            @empty
+              <tr>
+                <td colspan="4">Data Tidak Ada</td>
+              </tr>
+            @endforelse
           </tbody>
         </table>
       </div>

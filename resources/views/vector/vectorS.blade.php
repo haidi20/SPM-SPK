@@ -20,13 +20,17 @@
             </tr>
           </thead>
           <tbody>
-            @foreach($alternatif as $index => $item)
+            @forelse($alternatif as $index => $item)
               <tr>
                 <td>{{($index + 1)}}</td>
                 <td>{{$item->nama}}</td>
                 <td>{{array_get($hasil, $item->id)}}</td>
               </tr>
-            @endforeach
+            @empty
+              <tr>
+                <td colspan="3">Data Tidak Ada</td>
+              </tr>
+            @endforelse
           </tbody>
         </table>
       </div>
