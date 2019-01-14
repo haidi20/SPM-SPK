@@ -7,7 +7,7 @@
         <h1>Form Detail Kreteria</h1>
       </div>
       <div class="col-md-6 text-right">
-        <a href="{{route('detail-kreteria.index')}}" class="btn btn-success btn-md buat">Kembali</a>
+        <a href="{{route('detail-kreteria.index', ['kreteria' => $kreteria])}}" class="btn btn-success btn-md buat">Kembali</a>
       </div>
     </div>
     <hr class="dashed mb20 mt20">

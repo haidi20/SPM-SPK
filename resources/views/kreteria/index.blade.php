@@ -7,7 +7,9 @@
         <h1>Data Kriteria</h1>
       </div>
       <div class="col-md-6 text-right">
+        @if(Auth::user()->role == 'admin')
         <a href="{{route('kreteria.create')}}" class="btn btn-md btn-success buat">Buat</a>
+        @endif
       </div>
     </div>
     <hr class="dashed mb20 mt20">
@@ -22,7 +24,9 @@
               <th>Kreteria</th>
               <th>Attribut</th>
               <th>Bobot</th>
+              @if(Auth::user()->role == 'admin')
               <th class="action">Action</th>
+              @endif
             </tr>
           </thead>
           <tbody>
@@ -33,6 +37,7 @@
                 <td>{{$item->nama}}</td>
                 <td>{{$item->attribute}}</td>
                 <td>{{$item->bobot}}</td>
+                @if(Auth::user()->role == 'admin')
                 <td>
                   <a href="{{route('detail-kreteria.index',['kreteria' => $item->id])}}" class="btn btn-warning btn-sm">Detail</a>
                   <a href="{{route('kreteria.edit',$item->id)}}" class="btn btn-info btn-sm ">Edit</a>
@@ -42,6 +47,7 @@
                     Delete
                   </a>
                 </td>
+                @endif
               </tr>
             @empty
               <tr>

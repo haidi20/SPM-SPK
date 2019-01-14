@@ -4,17 +4,20 @@ namespace App\Supports ;
 
 use App\Models\Hasil;
 use App\Models\Kreteria;
+use App\Models\Detail_kreteria;
 use App\Models\Alternatif;
 
 class Logika {
 
   public function __construct(
                               Kreteria $kreteria,
+                              Detail_kreteria $detailKreteria,
                               Alternatif $alternatif,
                               Hasil $hasil
                             ){
     $this->hasil      = $hasil;
     $this->kreteria   = $kreteria;
+    $this->detailKreteria   = $detailKreteria;
     $this->alternatif = $alternatif;
   }
 
@@ -59,7 +62,8 @@ class Logika {
         $hasil[] = $this->hasil->kondisiAlternatif($item->id)->get();
         foreach ($bobot as $key => $value){
           $nilaiBobot = $value->attribute == 'Benefit' ? (double) $value->nilai : (double) -1 * $value->nilai;
-          $pangkat[$item->id][$key] = pow($hasil[$index][$key]->nilai, $nilaiBobot);
+          $detailKreteria = $this->detailKreteria->where('id', $hasil[$index][$key]->kreteria_detail_id)->value('nilai');
+          $pangkat[$item->id][$key] = pow($detailKreteria, $nilaiBobot);
         }
         $hasilAkhir[$item->id]  = $this->perkalian($pangkat[$item->id]);
       }
@@ -72,8 +76,8 @@ class Logika {
   {
     $jumlah = 1;
     
-    if($this->nilai != null){
-      foreach ($nilai as $index => $item) {
+    if($nilai != null){
+      foreach ($nilai  as $index => $item) {
         $jumlah = $jumlah * $item;
       }
     }
@@ -104,7 +108,7 @@ class Logika {
     $hasilAkhir = [];
 
     foreach ($alternatif as $index => $item) {
-      $hasilAkhir[$item->id] = $this->hasil->kondisiAlternatif($item->id)->pluck('nilai','kreteria_id');
+      $hasilAkhir[$item->id] = $this->hasil->kondisiAlternatif($item->id)->pluck('kreteria_detail_id', 'kreteria_id');
     }
 
     return $hasilAkhir;
@@ -116,7 +120,10 @@ class Logika {
     $hasilAkhir = [];
 
     foreach ($kreteria as $index => $item) {
-      $hasilAkhir[$item->id] = Hasil::kondisiKreteria($item->id,$id)->value('nilai');
+      $kreteria_id            = Hasil::kondisiKreteria($item->id, $id)->value('kreteria_detail_id');
+      foreach ($item->detail as $key => $value) {
+        $hasilAkhir[$item->id]  = $value->where('id', $kreteria_id)->value('id');
+      }
     }
 
     return $hasilAkhir;

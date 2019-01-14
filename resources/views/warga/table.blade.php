@@ -10,7 +10,9 @@
           @empty
 
           @endforelse
-          <th class="action">Action</th>
+          @if(Auth::user()->role == 'admin')
+            <th class="action">Action</th>
+          @endif
         </tr>
       </thead>
       <tbody>
@@ -20,8 +22,13 @@
               <td>{{$index + 1}}</td>
               <td>{{$item->alternatif->nama}}</td>
               @foreach ($kreteria as $key => $value)
-                <td>{{array_get($nilai[$item->alternatif_id],$value->id)}}</td>
+                @foreach($value->detail as $kunci => $nilaii)
+                  @if(array_get($nilai[$item->alternatif_id], $value->id) == $nilaii->id)
+                    <td>{{$nilaii->nama}}</td>
+                  @endif
+                @endforeach
               @endforeach
+              @if(Auth::user()->role == 'admin')
               <td>
                 <a href="{{route('warga.edit',$item->alternatif_id)}}" class="btn btn-info btn-sm ">Edit</a>
                 <a href="{{route('warga.destroy',$item->alternatif_id)}}"
@@ -30,6 +37,7 @@
                   Delete
                 </a>
               </td>
+              @endif
             </tr>
           @endif
         @empty

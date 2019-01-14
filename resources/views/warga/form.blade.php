@@ -25,7 +25,7 @@
                   <select name="alternatif" id="alternatif" class="form-control">
                     <option value="">Pilih Alternatif</option>
                     @foreach ($alternatif as $index => $item)
-                      <option value="{{$item->id}}">{{$item->nama}}</option>
+                      <option value="{{$item->id}}" {{old('alternatif') == $item->id ? 'selected' : ''}}>{{$item->nama}}</option>
                     @endforeach
                   </select>
                 @else
@@ -40,13 +40,14 @@
               <div class="form-group">
                 @forelse ($kreteria as $index => $item)
                   <label for="nilai_{{$item->id}}">{{$item->nama}}</label>
-                  <select name="alternatif" id="alternatif" class="form-control">
+                  <select name="kreteria_detail[]" id="nilai_{{$item->id}}" class="form-control">
                     @foreach ($item->detail as $key => $value)
-                      <option value="{{$value->id}}" {{$item->bobot == $value->nilai}}>{{$value->nama}}</option>
+                      <option value="{{$value->id}}" {{array_get($nilai, $item->id) == $value->id ? 'selected' : ''}}>{{$value->nama}}</option>
                     @endforeach
                   </select>
-                  {{-- <input type="text" name="nilai[{{$item->id}}]" id="nilai_{{$item->id}}" class="form-control" value="{{array_get($nilai,$item->id)}}"> --}}
-                  <input type="hidden" name="kreteria[]" value="{{$item->kreteria_id}}">
+                  {{-- <label>Nilai</label>
+                  <input type="text" name="nilai[{{$item->id}}]" class="form-control" value="{{array_get($nilai,$item->id)}}"> --}}
+                  <input type="hidden" name="kreteria[]" value="{{$item->id}}">
                   <input type="hidden" name="konfirm" value="true">
                 @empty
 

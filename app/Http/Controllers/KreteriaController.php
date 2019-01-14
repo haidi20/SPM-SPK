@@ -75,9 +75,9 @@ class KreteriaController extends Controller
 
     public function destroy($id)
     {
-      // $kreteria = Kreteria::find($id);
-      // $kreteria->delete();
+      $kreteria = Kreteria::find($id);
+      $kreteria->delete();
 
-      // return redirect()->back();
+      return redirect()->back();
     }
 }

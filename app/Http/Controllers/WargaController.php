@@ -69,16 +69,17 @@ class WargaController extends Controller
 
     public function save($id = null){
       $hasil = [];
-      $array = request('nilai');
+      $array = request('kreteria_detail');
+      $kreteria = request('kreteria');
 
       // input data ke table hasil
       foreach ($array as $index => $item) {
-        $nilai = $item;
-        $kreteria_id = $index;
+        $kreteria_detail_id = $item;
+        $kreteria_id = $kreteria[$index];
         $alternatif_id = request('alternatif');
 
         $hasil = Hasil::FirstOrCreate(compact('alternatif_id','kreteria_id'));
-        $hasil->nilai = $nilai;
+        $hasil->kreteria_detail_id = $kreteria_detail_id;
         $hasil->save();
       }
 

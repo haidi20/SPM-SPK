@@ -17,7 +17,7 @@ class CreateHasilTable extends Migration
             $table->increments('id');
             $table->integer('alternatif_id')->unsigned();
             $table->integer('kreteria_id')->unsigned();
-            $table->double('nilai')->default(0);
+            $table->double('kreteria_detail_id');
             $table->timestamps();
         });
     }
