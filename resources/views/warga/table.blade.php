@@ -25,12 +25,12 @@
             @endforeach
             @if(Auth::user()->role == 'admin')
             <td>
-              <a href="{{route('warga.edit',$item->alternatif_id)}}" class="btn btn-info btn-sm ">Edit</a>
-              <a href="{{route('warga.destroy',$item->alternatif_id)}}"
+              <a href="{{route('warga.edit', $item->id)}}" class="btn btn-info btn-sm ">Edit</a>
+              {{-- <a href="{{route('warga.destroy', $item->id)}}"
                 data-method="DELETE" data-confirm="Anda yakin akan menghapus data ini?"
                 class="btn btn-sm btn-danger" title="Hapus Data">
                 Delete
-              </a>
+              </a> --}}
             </td>
             @endif
           </tr>

@@ -115,7 +115,6 @@ class Logika {
         $idKreteria = array_get($hasil[$item->id], $value->id);
         $hasilAkhir[$item->id][$value->id] = $this->detailKreteria->where('id', $idKreteria)->value('nama');
       }
-      
     }
 
     return $hasilAkhir;

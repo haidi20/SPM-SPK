@@ -5,19 +5,15 @@
     <div class="row">
       <div class="col-md-12">
         <div class="jumbotron">
-          <h1>Selamat Datang</h1>
+          <h1>SPK RASKIN SUMBERMULYO</h1>
           <br>
-          @if (\Auth::user()->nama == 'saw')
+          @if (\Auth::user()->nama == 'WP')
             <p>
-              Di Sistem Pendukung Keputusan Metode SAW untuk Penilaian Kinerja
-              Standar Pelayanan Minimal
-              Pada Pendidikan Dasar Kota Samarinda
+             
             </p>
-          @elseif(\Auth::user()->nama == 'topsis')
+          @elseif(\Auth::user()->nama == 'WP')
             <p>
-              Di Sistem Pendukung Keputusan Metode TOPSIS untuk Penilaian Kinerja
-              Standar Pelayanan Minimal
-              Pada Pendidikan Dasar Kota Samarinda
+              
             </p>
           @endif
           <br>

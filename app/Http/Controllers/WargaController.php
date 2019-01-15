@@ -37,10 +37,10 @@ class WargaController extends Controller
     }
 
     public function form($id = null){
-      $hasilFind = Hasil::where('alternatif_id',$id)->get();
+      $alternatiffind = Alternatif::find($id);
 
-      if (count($hasilFind)) {
-        session()->flashInput($hasilFind->toArray());
+      if ($alternatiffind) {
+        // session()->flashInput($alternatiffind->toArray());
         $action = Route('warga.update',$id);
         $method = "PUT";
       }else{
@@ -89,10 +89,8 @@ class WargaController extends Controller
     }
 
     public function destroy($id){
-      $hasil = Hasil::where('alternatif_id',$id);
+      $hasil = Hasil::where('alternatif_id', $id);
       $hasil->delete();
-      $normalisasi = Normalisasi::where('alternatif_id',$id);
-      $normalisasi->delete();
 
       return redirect()->back();
     }

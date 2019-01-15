@@ -22,7 +22,7 @@
               <div class="form-group">
                 <label for="alternatif">Alternatif</label>
                 @if($method == 'POST')
-                  <select name="alternatif" id="alternatif" class="form-control">
+                  <select name="alternatif" id="alternatif" class="form-control" required>
                     <option value="">Pilih Alternatif</option>
                     @foreach ($alternatif as $index => $item)
                       <option value="{{$item->id}}" {{old('alternatif') == $item->id ? 'selected' : ''}}>{{$item->nama}}</option>
@@ -40,7 +40,8 @@
               <div class="form-group">
                 @forelse ($kreteria as $index => $item)
                   <label for="nilai_{{$item->id}}">{{$item->nama}}</label>
-                  <select name="kreteria_detail[]" id="nilai_{{$item->id}}" class="form-control">
+                  <select name="kreteria_detail[]" id="nilai_{{$item->id}}" class="form-control" required>
+                    <option value="">Kosong</option>
                     @foreach ($item->detail as $key => $value)
                       <option value="{{$value->id}}" {{array_get($nilai, $item->id) == $value->id ? 'selected' : ''}}>{{$value->nama}}</option>
                     @endforeach

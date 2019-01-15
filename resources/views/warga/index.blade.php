@@ -8,7 +8,7 @@
       </div>
       <div class="col-md-6 text-right">
         @if(Auth::user()->role == 'admin')
-        <a href="{{route('warga.create')}}" class="btn btn-md btn-success buat">Buat</a>
+        {{-- <a href="{{route('warga.create')}}" class="btn btn-md btn-success buat">Buat</a> --}}
         @endif
       </div>
     </div>
