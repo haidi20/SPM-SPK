@@ -19,7 +19,7 @@ class WargaController extends Controller
 
     public function index(){
       $kreteria   = Kreteria::berdasarkan()->get();
-      $warga      = Hasil::berdasarkanAlternatif()->get();
+      $warga      = Alternatif::all();
       $nilai      = $this->logika->warga();
 
       session()->put('aktif','warga');

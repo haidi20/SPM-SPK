@@ -106,10 +106,16 @@ class Logika {
   public function warga()
   {
     $alternatif = $this->alternatif->get();
+    $kreteria   = $this->kreteria->get();
     $hasilAkhir = [];
 
     foreach ($alternatif as $index => $item) {
-      $hasilAkhir[$item->id] = $this->hasil->kondisiAlternatif($item->id)->pluck('kreteria_detail_id', 'kreteria_id');
+      $hasil[$item->id] = $this->hasil->kondisiAlternatif($item->id)->pluck('kreteria_detail_id', 'kreteria_id');
+      foreach ($kreteria as $key => $value) {
+        $idKreteria = array_get($hasil[$item->id], $value->id);
+        $hasilAkhir[$item->id][$value->id] = $this->detailKreteria->where('id', $idKreteria)->value('nama');
+      }
+      
     }
 
     return $hasilAkhir;
