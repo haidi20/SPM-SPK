@@ -59,10 +59,10 @@ class Logika {
 
     if($bobot){
       foreach ($alternatif as $index => $item){
-        $hasil[] = $this->hasil->kondisiAlternatif($item->id)->get();
+        $hasil[] = $this->hasil->kondisiAlternatif($item->id)->value('kreteria_detail_id');
         foreach ($bobot as $key => $value){
           $nilaiBobot = $value->attribute == 'Benefit' ? (double) $value->nilai : (double) -1 * $value->nilai;
-          $detailKreteria = $this->detailKreteria->where('id', $hasil[$index][$key]->kreteria_detail_id)->value('nilai');
+          $detailKreteria = $this->detailKreteria->where('id', $hasil[$index])->value('nilai');
           $pangkat[$item->id][$key] = pow($detailKreteria, $nilaiBobot);
         }
         $hasilAkhir[$item->id]  = $this->perkalian($pangkat[$item->id]);
@@ -95,8 +95,9 @@ class Logika {
       $nilai      = number_format($item->bobot / $sumBobot, 2);
       $kode       = $item->kode;
       $attribute  = $item->attribute;
+      $kreteria   = $item->id;
 
-      $hasilAKhir[] = (object) compact('kode', 'nilai', 'attribute');
+      $hasilAKhir[] = (object) compact('kode', 'nilai', 'attribute', 'kreteria');
     }
 
     return $hasilAKhir;

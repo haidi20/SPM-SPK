@@ -6,16 +6,29 @@ use Illuminate\Http\Request;
 
 use App\Models\Kreteria;
 
+use App\Supports\Logika;
+
 class KreteriaController extends Controller
 {
+    public function __construct(Logika $logika)
+    {
+      $this->logika = $logika;
+    }
+
     public function index()
     {
       $kreteria = Kreteria::berdasarkan()->get();
+      $prosesPerbaikanBobot = $this->logika->prosesPerbaikanBobot();
+      $perbaikanBobot = [];
+
+      foreach ($prosesPerbaikanBobot as $key => $value) {
+        $perbaikanBobot[$value->kreteria] = $value->nilai;
+      }
 
       session()->put('aktif','kreteria');
       session()->put('aktiff','dasar');
 
-      return view('kreteria.index',compact('kreteria'));
+      return view('kreteria.index',compact('kreteria', 'perbaikanBobot'));
     }
 
     public function create()

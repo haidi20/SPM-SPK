@@ -24,6 +24,7 @@
               <th>Kreteria</th>
               <th>Attribut</th>
               <th>Bobot</th>
+              <th>Perbaikan Bobot</th>
               @if(Auth::user()->role == 'admin')
               <th class="action">Action</th>
               @endif
@@ -37,6 +38,7 @@
                 <td>{{$item->nama}}</td>
                 <td>{{$item->attribute}}</td>
                 <td>{{$item->bobot}}</td>
+                <td>{{array_get($perbaikanBobot, $item->id)}}</td>
                 @if(Auth::user()->role == 'admin')
                 <td>
                   <a href="{{route('detail-kreteria.index',['kreteria' => $item->id])}}" class="btn btn-warning btn-sm">Detail</a>
