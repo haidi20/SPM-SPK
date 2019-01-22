@@ -8,7 +8,8 @@ class Hasil extends Model
 {
     protected $table = 'hasil';
 
-    public $fillable = ['kreteria_id','alternatif_id','nilai'];
+    #
+    public $fillable = ['kreteria_id','alternatif_id','kreteria_detail_id'];
 
     public function alternatif(){
       return $this->belongsTo('App\Models\Alternatif');
@@ -26,8 +27,8 @@ class Hasil extends Model
       $query->orderBy('alternatif_id')->groupBy('alternatif_id');
     }
 
-    public function scopeKreteriaAlternatif($query,$kode){
-      $query->where('kreteria_id',$kode)
+    public function scopeKreteriaAlternatif($query, $id){
+      $query->where('kreteria_id', $id)
             ->join('kreteria','hasil.kreteria_id','=','kreteria.id')
             ->join('alternatif','hasil.alternatif_id','=','alternatif.id');
     }
@@ -37,9 +38,9 @@ class Hasil extends Model
             ->orderBy('kreteria_id');
     }
 
-    public function scopeKondisiKreteria($query,$kreteria_id,$alternatif_id){
-      $query->where('kreteria_id',$kreteria_id)
-            ->where('alternatif_id',$alternatif_id);
+    public function scopeKondisiKreteria($query, $kreteria_id, $alternatif_id){
+      $query->where('kreteria_id', $kreteria_id)
+            ->where('alternatif_id', $alternatif_id);
     }
 
 }

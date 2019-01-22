@@ -13,7 +13,7 @@ class AlternatifController extends Controller
 
       session()->put('aktif','alternatif');
       session()->put('aktiff','dasar');
-      return view('alternatif.index',compact('alternatif'));
+      return view('alternatif.index', compact('alternatif'));
     }
 
     public function create(){
@@ -29,14 +29,14 @@ class AlternatifController extends Controller
 
       if ($alternatifFind){
           session()->flashInput($alternatifFind->toArray());
-          $action   = route('alternatif.update',$id);
+          $action   = route('alternatif.update', $id);
           $method   = 'PUT';
       }else{
           $action   = route('alternatif.store');
           $method   = 'POST';
       }
 
-      return view('alternatif.form',compact('action','method'));
+      return view('alternatif.form', compact('action', 'method'));
     }
 
     public function store(){
@@ -51,11 +51,11 @@ class AlternatifController extends Controller
       if ($id) {
         $alternatif = Alternatif::find($id);
       }else{
-        $alternatif = new Alternatif;
-        $alternatif->kode = rand(100,900);
+        $alternatif = new Alternatif; 
       }
 
       $alternatif->nama = request('nama');
+      $alternatif->nik  = request('nik');
       $alternatif->save();
 
       return redirect()->route('alternatif.index');

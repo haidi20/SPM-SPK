@@ -7,9 +7,9 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      {{-- <a class="navbar-brand brand" href="#">Standar Pelayanan Minimal</a> --}}
+      {{-- <a class="navbar-brand brand" href="#">Standar Pelayanan Raskin</a> --}}
       <a href="" class="navbar-brand brand">
-        {{-- Sistem Pendukung Keputusan Metode SAW --}}
+        {{-- Sistem Pendukung Keputusan Metode WP --}}
       </a>
     </div>
 

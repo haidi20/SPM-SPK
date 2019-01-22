@@ -97,6 +97,7 @@ class Logika {
       $attribute  = $item->attribute;
       $kreteria   = $item->id;
 
+      // compact = array('variable' => 'value');
       $hasilAKhir[] = (object) compact('kode', 'nilai', 'attribute', 'kreteria');
     }
 

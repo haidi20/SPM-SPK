@@ -20,6 +20,14 @@
           <div class="row">
             <div class="col-md">
               <div class="form-group">
+                <label for="nik">Nik</label>
+                <input type="text" name="nik" id="nik" class="form-control" value="{{old('nik')}}">
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md">
+              <div class="form-group">
                 <label for="nama">Nama Warga</label>
                 <input type="text" name="nama" id="nama" class="form-control" value="{{old('nama')}}">
               </div>

@@ -25,7 +25,7 @@ class WargaController extends Controller
       session()->put('aktif','warga');
       session()->put('aktiff','dasar');
 
-      return view('warga.index',compact('nilai','kreteria','warga'));
+      return view('warga.index',compact('nilai', 'kreteria', 'warga'));
     }
 
     public function create(){
@@ -78,7 +78,7 @@ class WargaController extends Controller
         $kreteria_id = $kreteria[$index];
         $alternatif_id = request('alternatif');
 
-        $hasil = Hasil::FirstOrCreate(compact('alternatif_id','kreteria_id'));
+        $hasil = Hasil::FirstOrCreate(compact('alternatif_id', 'kreteria_id'));
         $hasil->kreteria_detail_id = $kreteria_detail_id;
         $hasil->save();
       }

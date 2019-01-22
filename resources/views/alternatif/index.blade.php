@@ -20,7 +20,7 @@
           <thead >
             <tr>
               <th class="no">No</th>
-              <th>Kode warga</th>
+              <th>Nik warga</th>
               <th>Nama warga</th>
               @if(Auth::user()->role == 'admin')
               <th class="action">Action</th>
@@ -31,7 +31,7 @@
             @forelse ($alternatif as $index => $item)
               <tr>
                 <td>{{$index + 1}}</td>
-                <td>{{$item->kode}}</td>
+                <td>{{$item->nik}}</td>
                 <td>{{$item->nama}}</td>
                 @if(Auth::user()->role == 'admin')
                 <td>

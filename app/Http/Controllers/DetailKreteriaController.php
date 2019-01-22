@@ -64,10 +64,10 @@ class DetailKreteriaController extends Controller
     {
     	if($id) {
         	$detail_kreteria 	= $this->detail_kreteria::find($id);
-        	$kreteria 			= $detail_kreteria->kreteria_id;
+        	$kreteria 			  = $detail_kreteria->kreteria_id;
       	}else{
         	$detail_kreteria 	= new $this->detail_kreteria;
-        	$kreteria 			= request('kreteria');
+        	$kreteria 			  = request('kreteria');
       	}
 
       	$detail_kreteria->kreteria_id 	= $kreteria;
