@@ -52,19 +52,21 @@ class Logika {
   public function prosesVectorS()
   {
     $bobot        = $this->prosesPerbaikanBobot();
-    $alternatif   = $this->alternatif->get();
+    $alternatif   = $this->alternatif->all();
     $hasilAkhir   = [];
     $pangkat      = [];
     $hasil        = [];
 
     if($bobot){
       foreach ($alternatif as $index => $item){
-        $hasil[] = $this->hasil->kondisiAlternatif($item->id)->value('kreteria_detail_id');
-        foreach ($bobot as $key => $value){
+        $hasil[] = $this->hasil->select('kreteria_detail_id')->where('alternatif_id', $item->id)->get();
+        foreach ($bobot as $key => $value){          
           $nilaiBobot = $value->attribute == 'Benefit' ? (double) $value->nilai : (double) -1 * $value->nilai;
-          $detailKreteria = $this->detailKreteria->where('id', $hasil[$index])->value('nilai');
-          $pangkat[$item->id][$key] = pow($detailKreteria, $nilaiBobot);
+          $detailKreteria = $this->detailKreteria->where('id', $hasil[$index][$key]->kreteria_detail_id)->value('nilai');
+
+          $pangkat[$item->id][$key] = number_format(pow($detailKreteria, $nilaiBobot), 2);
         }
+
         $hasilAkhir[$item->id]  = $this->perkalian($pangkat[$item->id]);
       }
     }
@@ -82,7 +84,7 @@ class Logika {
       }
     }
 
-    return number_format($jumlah, 3);
+    return number_format($jumlah, 2);
   }
 
   public function prosesPerbaikanBobot()
@@ -114,7 +116,7 @@ class Logika {
       $hasil[$item->id] = $this->hasil->kondisiAlternatif($item->id)->pluck('kreteria_detail_id', 'kreteria_id');
       foreach ($kreteria as $key => $value) {
         $idKreteria = array_get($hasil[$item->id], $value->id);
-        $hasilAkhir[$item->id][$value->id] = $this->detailKreteria->where('id', $idKreteria)->value('nama');
+        $hasilAkhir[$item->id][$value->id] = $this->detailKreteria->where('id', $idKreteria)->value('nilai');
       }
     }
 
