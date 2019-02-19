@@ -167,8 +167,6 @@ return [
          * Package Service Providers...
          */
         Laravel\Tinker\TinkerServiceProvider::class,
-        Maatwebsite\Excel\ExcelServiceProvider::class,
-        Sentry\SentryLaravel\SentryLaravelServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -178,6 +176,7 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+        Novay\WordTemplate\WordTemplateServiceProvider::class,
 
     ],
 
@@ -227,8 +226,7 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
-        'Sentry' => Sentry\SentryLaravel\SentryFacade::class,
-        'Excel' => Maatwebsite\Excel\Facades\Excel::class,
+        'WordTemplate' => Novay\WordTemplate\Facade::class,
     ],
 
 ];
